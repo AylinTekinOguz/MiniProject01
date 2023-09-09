@@ -1,4 +1,7 @@
 package biletRezervasyonApp;
+
+import java.util.Scanner;
+
 /*
 Project: Bilet Rezervasyon ve Bilet Fiyatı Hesaplama Uygulaması
 
@@ -28,7 +31,7 @@ Project: Bilet Rezervasyon ve Bilet Fiyatı Hesaplama Uygulaması
 public class TicketReservationApp {
     public static void main(String[] args) {
 
-        //1- Bilet rezervasyonunu yapacağımız bir ptpbüse ihtiyaç var. Otobüs objesi oluşturalım.
+        //1- Bilet rezervasyonunu yapacağımız bir otobüse ihtiyaç var. Otobüs objesi oluşturalım.
 
             Bus bus = new Bus("34 ASD 789"); //"1", "2",...
 
@@ -36,42 +39,70 @@ public class TicketReservationApp {
 
         Ticket bilet = new Ticket();
 
-        //.....
+        //7 uygulamayı başlatalım
 
-
+        start (bus, bilet);
 
 
     }
 
+    private static void start(Bus bus, Ticket bilet) {
+
+        Scanner input = new Scanner(System.in);
+        int select; //çıkış için 0 seçiniz
+        //8- kullanıcıdan bilgileri alalım
+
+        do {
+            System.out.println("* Bilet Rezervasyon Sistemine Hoşgeldiniz *");
+
+            System.out.println("Lütfen yaşınızı giriniz");
+            int age = input.nextInt();
+
+            System.out.println("Lütfen gidilecek mesafe bilgisini km olarak giriniz");
+            int distance = input.nextInt();
+
+            System.out.println("Lütfen yolculuk yönünü seçiniz");
+            System.out.println("1: Tek Yön \n2: Gidiş-Dönüş");
+            int type = input.nextInt();
+
+            System.out.println("Koltuk numarası seçiniz");
+            System.out.println("Tekli koltuk ücreti %20 daha fazladır");
+            System.out.println(bus.seats); //mevcut koltuk numaraları
+            String seat=input.next();
+
+            //seçilen koltuk no listede var mı? rezerve edilmiş mi?
+            boolean isReserved = !bus.seats.contains(seat);
+
+            if (isReserved){
+                System.out.println("Seçilen koltuk rezerve edilmiştir.");
+            }
+            //girilen değerler geçerli mi?
+            if (age>0 && distance>0 && (type==1 || type==2) && !isReserved ){
+                //koltuk no rezerve olacağı için listeden çıkaralım
+                bus.seats.remove(seat);
+                //bileti oluşturalım
+
+                bilet.distance=distance;
+                bilet.typeNo=type;
+                bilet.seatNo=seat;
+                bilet.getTotalPrice(age);
+
+                //bileti yazdıralım
+                bilet.printTicket(bus);
+
+
+            }else {
+                System.out.println("Geçersiz bir giriş yaptınız");
+            }
+            System.out.println("Yeni işlem için bir sayı girin ve ya ÇIKIŞ için 0 giriniz");
+            select=input.nextInt();
+
+        }while (select!=0);
+        System.out.println("İyi günler dileriz...");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 }
